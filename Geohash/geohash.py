@@ -1,5 +1,6 @@
 """
-Copyright (C) 2008 Leonard Norrgard <leonard.norrgard@refactor.fi>
+Copyright (C) 2008 Leonard Norrgard <leonard.norrgard@gmail.com>
+Copyright (C) 2015 Leonard Norrgard <leonard.norrgard@gmail.com>
 
 This file is part of Geohash.
 

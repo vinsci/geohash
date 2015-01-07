@@ -41,12 +41,13 @@ respectively.
 Download
 ========
 
-Geohash 1.0rc1 is available for download here: Geohash-1.0rc1.tar.gz_ and from the `Python Package Index`_.
+Geohash is available for download from github_ and from the `Python Package Index`_.
 
 License
 =======
 
-Copyright (C) 2008 Leonard Norrgard <leonard.norrgard@refactor.fi>
+Copyright (C) 2008 Leonard Norrgard <leonard.norrgard@gmail.com>
+Copyright (C) 2015 Leonard Norrgard <leonard.norrgard@gmail.com>
 
 Geohash is free software: you can redistribute it and/or modify it
 under the terms of the GNU Affero General Public License as published
@@ -69,7 +70,7 @@ The Geohash encoding was originally described by Gustavo Niemeyer and
 the algorithm published in the Wikipedia Geohash_ article.
 
 This implementation of Geohashes was written by Leonard Norrgard
-<leonard.norrgard@refactor.fi>.
+<leonard.norrgard@gmail.com>.
 
 Keywords
 ========
@@ -77,7 +78,7 @@ Keywords
 Geohash, GIS, latitude, longitude, encode, decode, Galileo, GPS, WGS84, coordinates, geotagging.
 
 .. _Geohashes: http://en.wikipedia.org/wiki/Geohash
-.. _Geohash-1.0rc1.tar.gz: http://www.refactor.fi/software/gis/geohash/Geohash-1.0rc1.tar.gz
+.. _github: https://github.com/vinsci/geohash/archive/master.zip
 .. _Python package index: http://pypi.python.org
 .. _Geohash: http://en.wikipedia.org/wiki/Geohash
 
