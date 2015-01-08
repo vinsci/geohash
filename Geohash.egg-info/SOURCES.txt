@@ -1,6 +1,6 @@
 LICENSE.txt
 MANIFEST.in
-README.txt
+README.rst
 setup.py
 Geohash/__init__.py
 Geohash/geohash.py

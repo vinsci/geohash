@@ -1,8 +1,8 @@
-Metadata-Version: 1.0
+Metadata-Version: 1.1
 Name: Geohash
-Version: 1.0rc1
+Version: 1.0
 Summary: Module to decode/encode Geohashes to/from latitude and longitude.  See http://en.wikipedia.org/wiki/Geohash
-Home-page: https://github.com/vinsci/geohash
+Home-page: https://github.com/vinsci/geohash/
 Author: Leonard Norrgard
 Author-email: leonard.norrgard@gmail.com
 License: GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
