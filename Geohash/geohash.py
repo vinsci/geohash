@@ -29,6 +29,22 @@ for i in range(len(__base32)):
     __decodemap[__base32[i]] = i
 del i
 
+# the distance between geohashes based on matching characters, in meters.
+_PRECISION = {
+    0: 20000000,
+    1: 5003530,
+    2: 625441,
+    3: 123264,
+    4: 19545,
+    5: 3803,
+    6: 610,
+    7: 118,
+    8: 19,
+    9: 3.71,
+    10: 0.6,
+}
+
+
 def decode_exactly(geohash):
     """
     Decode the geohash to its exact values, including the error
@@ -60,6 +76,7 @@ def decode_exactly(geohash):
     lon = (lon_interval[0] + lon_interval[1]) / 2
     return lat, lon, lat_err, lon_err
 
+
 def decode(geohash):
     """
     Decode geohash, returning two strings with latitude and longitude
@@ -73,14 +90,16 @@ def decode(geohash):
     if '.' in lons: lons = lons.rstrip('0')
     return lats, lons
 
+
 def encode(latitude, longitude, precision=12):
     """
     Encode a position given in float arguments latitude, longitude to
     a geohash which will have the character count precision.
     """
-    lat_interval, lon_interval = (-90.0, 90.0), (-180.0, 180.0)
+    lat_interval = (-90.0, 90.0)
+    lon_interval = (-180.0, 180.0)
     geohash = []
-    bits = [ 16, 8, 4, 2, 1 ]
+    bits = [16, 8, 4, 2, 1]
     bit = 0
     ch = 0
     even = True
@@ -107,3 +126,39 @@ def encode(latitude, longitude, precision=12):
             bit = 0
             ch = 0
     return ''.join(geohash)
+
+
+def distance(geohash_1, geohash_2):
+    """
+    Returns the approximate great-circle distance between two geohashes.
+
+    :param geohash_1:
+    :param geohash_2:
+    :return:
+    """
+
+    # normalize the geohashes to the length of the shortest
+    len_1 = len(geohash_1)
+    len_2 = len(geohash_2)
+    if len_1 > len_2:
+        geohash_1 = geohash_1[:len_2]
+    elif len_2 > len_1:
+        geohash_2 = geohash_2[:len_1]
+
+    # find how many leading characters are matching
+    matching = 0
+    for g1, g2 in zip(geohash_1, geohash_2):
+        if g1 == g2:
+            matching += 1
+        else:
+            break
+
+    # we only have precision metrics up to 10 characters
+    if matching > 10:
+        matching = 10
+
+    return _PRECISION[matching]
+
+
+
+
