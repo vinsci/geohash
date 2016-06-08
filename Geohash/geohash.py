@@ -107,3 +107,31 @@ def encode(latitude, longitude, precision=12):
             bit = 0
             ch = 0
     return ''.join(geohash)
+
+def neighbor(geohash,direction):
+    (lat, lon, lat_err, lon_err)=decode_exactly(geohash)
+    neighborLat=lat+direction[0]*lat_err*2
+    neighborLon=lon+direction[1]*lon_err*2
+    return encode(neighborLat, neighborLon, len(geohash))
+
+def __encodeNeighbor(lat,lon,lat_err, lon_err,direction,length):
+        neighbor_lat = lat + direction[0] * lat_err;
+        neighbor_lon = lon + direction[1] * lon_err;
+        return encode(neighbor_lat, neighbor_lon,length )
+
+def neighbors(geohash):
+    hashstringLength=len(geohash)
+    (lat, lon, lat_err, lon_err)=decode_exactly(geohash)
+
+    neighborHashList=[
+                    __encodeNeighbor(lat, lon, lat_err*2, lon_err*2,[-1,1],hashstringLength),
+                    __encodeNeighbor(lat, lon, lat_err*2, lon_err*2,[0,1],hashstringLength),
+                    __encodeNeighbor(lat, lon, lat_err*2, lon_err*2,[1,1],hashstringLength),
+                    __encodeNeighbor(lat, lon, lat_err*2, lon_err*2,[-1,0],hashstringLength),
+                    __encodeNeighbor(lat, lon, lat_err*2, lon_err*2,[0,0],hashstringLength),
+                    __encodeNeighbor(lat, lon, lat_err*2, lon_err*2,[1,0],hashstringLength),
+                    __encodeNeighbor(lat, lon, lat_err*2, lon_err*2,[-1,-1],hashstringLength),
+                    __encodeNeighbor(lat, lon, lat_err*2, lon_err*2,[0,-1],hashstringLength),
+                    __encodeNeighbor(lat, lon, lat_err*2, lon_err*2,[1,-1],hashstringLength)
+    ]
+    return neighborHashList
