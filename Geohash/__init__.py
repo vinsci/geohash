@@ -19,3 +19,4 @@ License along with Geohash.  If not, see
 <http://www.gnu.org/licenses/>.
 """
 from geohash import decode_exactly, decode, encode
+from numpy_geohash import numpy_encode
