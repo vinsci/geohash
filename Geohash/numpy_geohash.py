@@ -27,7 +27,7 @@ import numpy as np
 __base32 = np.array(list('0123456789bcdefghjkmnpqrstuvwxyz'))
 
 
-def numpy_encode(latitude: np.array, longitude: np.array, precision: int =12) -> np.array:
+def numpy_encode(latitude: np.array, longitude: np.array, precision: int = 12) -> np.array:
     """
     Geohash vectors of latitiude and longitude to a given precision.
     
