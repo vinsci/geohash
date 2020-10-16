@@ -18,5 +18,10 @@ You should have received a copy of the GNU Affero General Public
 License along with Geohash.  If not, see
 <http://www.gnu.org/licenses/>.
 """
-from .geohash import decode_exactly, decode, encode
-from .numpy_geohash import numpy_encode
+
+from . import util
+
+from . import encode
+from . import decode
+
+from . import geohash
