@@ -1,8 +1,8 @@
 """
+This file is part of Geohash.
+
 Copyright (C) 2008 Leonard Norrgard <leonard.norrgard@gmail.com>
 Copyright (C) 2015 Leonard Norrgard <leonard.norrgard@gmail.com>
-
-This file is part of Geohash.
 
 Geohash is free software: you can redistribute it and/or modify it
 under the terms of the GNU Affero General Public License as published
@@ -23,11 +23,42 @@ from math import log10
 #  Note: the alphabet in geohash differs from the common base32
 #  alphabet described in IETF's RFC 4648
 #  (http://tools.ietf.org/html/rfc4648)
-__base32 = '0123456789bcdefghjkmnpqrstuvwxyz'
-__decodemap = { }
-for i in range(len(__base32)):
-    __decodemap[__base32[i]] = i
-del i
+_BASE32 = "0123456789bcdefghjkmnpqrstuvwxyz"
+__decodemap = {
+    "0": 0,
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
+    "b": 10,
+    "c": 11,
+    "d": 12,
+    "e": 13,
+    "f": 14,
+    "g": 15,
+    "h": 16,
+    "j": 17,
+    "k": 18,
+    "m": 19,
+    "n": 20,
+    "p": 21,
+    "q": 22,
+    "r": 23,
+    "s": 24,
+    "t": 25,
+    "u": 26,
+    "v": 27,
+    "w": 28,
+    "x": 29,
+    "y": 30,
+    "z": 31,
+}
+
 
 def decode_exactly(geohash):
     """
@@ -40,25 +71,26 @@ def decode_exactly(geohash):
     lat_interval, lon_interval = (-90.0, 90.0), (-180.0, 180.0)
     lat_err, lon_err = 90.0, 180.0
     is_even = True
-    for c in geohash:
-        cd = __decodemap[c]
-        for mask in [16, 8, 4, 2, 1]:
-            if is_even: # adds longitude info
+    for character in geohash:
+        code = __decodemap[character]
+        for mask in (16, 8, 4, 2, 1):
+            if is_even:  # adds longitude info
                 lon_err /= 2
-                if cd & mask:
-                    lon_interval = ((lon_interval[0]+lon_interval[1])/2, lon_interval[1])
+                if code & mask:
+                    lon_interval = ((lon_interval[0] + lon_interval[1]) / 2, lon_interval[1])
                 else:
-                    lon_interval = (lon_interval[0], (lon_interval[0]+lon_interval[1])/2)
-            else:      # adds latitude info
+                    lon_interval = (lon_interval[0], (lon_interval[0] + lon_interval[1]) / 2)
+            else:  # adds latitude info
                 lat_err /= 2
-                if cd & mask:
-                    lat_interval = ((lat_interval[0]+lat_interval[1])/2, lat_interval[1])
+                if code & mask:
+                    lat_interval = ((lat_interval[0] + lat_interval[1]) / 2, lat_interval[1])
                 else:
-                    lat_interval = (lat_interval[0], (lat_interval[0]+lat_interval[1])/2)
+                    lat_interval = (lat_interval[0], (lat_interval[0] + lat_interval[1]) / 2)
             is_even = not is_even
     lat = (lat_interval[0] + lat_interval[1]) / 2
     lon = (lon_interval[0] + lon_interval[1]) / 2
     return lat, lon, lat_err, lon_err
+
 
 def decode(geohash):
     """
@@ -67,35 +99,38 @@ def decode(geohash):
     """
     lat, lon, lat_err, lon_err = decode_exactly(geohash)
     # Format to the number of decimals that are known
-    lats = "%.*f" % (max(1, int(round(-log10(lat_err)))) - 1, lat)
-    lons = "%.*f" % (max(1, int(round(-log10(lon_err)))) - 1, lon)
-    if '.' in lats: lats = lats.rstrip('0')
-    if '.' in lons: lons = lons.rstrip('0')
+    lats = f"{(max(1, int(round(-log10(lat_err)))) - 1, lat)}"
+    lons = f"{(max(1, int(round(-log10(lon_err)))) - 1, lon)}"
+    if "." in lats:
+        lats = lats.rstrip("0")
+    if "." in lons:
+        lons = lons.rstrip("0")
     return lats, lons
 
-def encode(latitude, longitude, precision=12):
+
+def encode(latitude, longitude, precision: int = 6):
     """
     Encode a position given in float arguments latitude, longitude to
     a geohash which will have the character count precision.
     """
     lat_interval, lon_interval = (-90.0, 90.0), (-180.0, 180.0)
-    geohash = []
-    bits = [ 16, 8, 4, 2, 1 ]
+    geohash: list = []
+    bits = (16, 8, 4, 2, 1)
     bit = 0
-    ch = 0
+    check = 0
     even = True
     while len(geohash) < precision:
         if even:
             mid = (lon_interval[0] + lon_interval[1]) / 2
             if longitude > mid:
-                ch |= bits[bit]
+                check |= bits[bit]
                 lon_interval = (mid, lon_interval[1])
             else:
                 lon_interval = (lon_interval[0], mid)
         else:
             mid = (lat_interval[0] + lat_interval[1]) / 2
             if latitude > mid:
-                ch |= bits[bit]
+                check |= bits[bit]
                 lat_interval = (mid, lat_interval[1])
             else:
                 lat_interval = (lat_interval[0], mid)
@@ -103,7 +138,7 @@ def encode(latitude, longitude, precision=12):
         if bit < 4:
             bit += 1
         else:
-            geohash += __base32[ch]
+            geohash += _BASE32[check]
             bit = 0
-            ch = 0
-    return ''.join(geohash)
+            check = 0
+    return "".join(geohash)
